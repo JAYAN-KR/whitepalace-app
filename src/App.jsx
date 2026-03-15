@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect, useMemo } from 'react';
-import { 
+import {
   Home, FileText, Bell, MessageSquare, Phone, Users, Settings, Plus, DollarSign, CreditCard, CheckCircle, X, AlertCircle, Menu, LogOut
 } from 'lucide-react';
 import { initializeApp } from 'firebase/app';
@@ -103,7 +103,7 @@ export default function App() {
           case 'announcements': setAnnouncements(data); break;
           case 'messages': setMessages(data); break;
           case 'contacts': setContacts(data); break;
-          case 'settings': 
+          case 'settings':
             if (data.length > 0) {
               const globalSettings = data.find(s => s.id === 'global') || data[0];
               setSettings(globalSettings);
@@ -131,7 +131,7 @@ export default function App() {
 
     const processedLedger = sorted.map(entry => {
       const amount = Number(entry.amount);
-      if (entry.type === 'Income') { balance += amount; totalIncome += amount; } 
+      if (entry.type === 'Income') { balance += amount; totalIncome += amount; }
       else { balance -= amount; totalExpense += amount; }
 
       const entryDate = new Date(entry.timestamp);
@@ -237,12 +237,12 @@ const ProfileSetup = ({ user, onComplete, db, appId }) => {
         <h2 className="text-2xl font-bold text-slate-800 mb-2">Welcome to White Palace Apartment</h2>
         <p className="text-slate-500 mb-6">Let's set up your profile for the community portal.</p>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div><label className="block text-sm font-medium text-slate-700 mb-1">Full Name</label><input required type="text" className="w-full p-3 border border-slate-300 rounded-lg" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} /></div>
-          <div><label className="block text-sm font-medium text-slate-700 mb-1">Flat Number (e.g., B302)</label><input required type="text" className="w-full p-3 border border-slate-300 rounded-lg uppercase" value={formData.flatNumber} onChange={e => setFormData({...formData, flatNumber: e.target.value.toUpperCase()})} /></div>
-          <div><label className="block text-sm font-medium text-slate-700 mb-1">Phone Number</label><input required type="tel" className="w-full p-3 border border-slate-300 rounded-lg" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} /></div>
+          <div><label className="block text-sm font-medium text-slate-700 mb-1">Full Name</label><input required type="text" className="w-full p-3 border border-slate-300 rounded-lg" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} /></div>
+          <div><label className="block text-sm font-medium text-slate-700 mb-1">Flat Number (e.g., B302)</label><input required type="text" className="w-full p-3 border border-slate-300 rounded-lg uppercase" value={formData.flatNumber} onChange={e => setFormData({ ...formData, flatNumber: e.target.value.toUpperCase() })} /></div>
+          <div><label className="block text-sm font-medium text-slate-700 mb-1">Phone Number</label><input required type="tel" className="w-full p-3 border border-slate-300 rounded-lg" value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} /></div>
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">Your Role</label>
-            <select className="w-full p-3 border border-slate-300 rounded-lg" value={formData.role} onChange={e => setFormData({...formData, role: e.target.value})}>
+            <select className="w-full p-3 border border-slate-300 rounded-lg" value={formData.role} onChange={e => setFormData({ ...formData, role: e.target.value })}>
               <option value="Owner">Resident (Owner)</option><option value="Tenant">Tenant</option><option value="Admin">Management Committee (Admin)</option>
             </select>
           </div>
@@ -255,7 +255,7 @@ const ProfileSetup = ({ user, onComplete, db, appId }) => {
 
 const Dashboard = ({ profile, settings, payments, ledgerStats, showToast, getCollectionRef }) => {
   const currentMonthStr = new Date().toLocaleString('default', { month: 'long', year: 'numeric' });
-  
+
   if (profile.role === 'Admin') {
     return (
       <div className="space-y-6">
@@ -269,10 +269,10 @@ const Dashboard = ({ profile, settings, payments, ledgerStats, showToast, getCol
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
           <h3 className="text-lg font-bold text-slate-800 mb-4">Quick Actions</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-             <div className="p-4 bg-slate-50 rounded-lg text-center border border-slate-100">
-               <p className="text-sm text-slate-500 mb-1">Current Maintenance</p>
-               <p className="text-xl font-bold text-slate-800">₹{settings.maintenanceAmount}</p>
-             </div>
+            <div className="p-4 bg-slate-50 rounded-lg text-center border border-slate-100">
+              <p className="text-sm text-slate-500 mb-1">Current Maintenance</p>
+              <p className="text-xl font-bold text-slate-800">₹{settings.maintenanceAmount}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -287,7 +287,7 @@ const Dashboard = ({ profile, settings, payments, ledgerStats, showToast, getCol
   const [utrNumber, setUtrNumber] = useState('');
 
   const isBankConfigured = settings.accountNumber && settings.ifscCode;
-  const upiString = isBankConfigured ? `const upiString = `upi://pay?pa=jkrmalayalam@okicici&pn=White%20Palace%20Apartment&am=10&cu=INR&tn=Flat_${profile.flatNumber}_Maintenance`;//pay?pa=${settings.accountNumber}@${settings.ifscCode}.ifsc.npci&pn=${encodeURIComponent(settings.accountName || 'Apartment Association')}&am=${settings.maintenanceAmount}&cu=INR&tn=Flat_${profile.flatNumber}_Maintenance` : '#';
+  const upiString = isBankConfigured ? 'upi://pay?pa=607802010001915@UBIN056078.ifsc.npci&pn=WHITE%20PALACE%20ASSOCIATION&am=10&cu=INR&tn=Maintenance_Payment' : '#';
 
   const handlePayment = async () => {
     if (!utrNumber || utrNumber.length < 6) { showToast("Please enter a valid Transaction ID/UTR.", "error"); return; }
@@ -311,8 +311,8 @@ const Dashboard = ({ profile, settings, payments, ledgerStats, showToast, getCol
             <h3 className="text-lg font-bold text-slate-800">Maintenance: {currentMonthStr}</h3>
             <p className={`text-sm mt-1 ${hasPaidCurrentMonth ? 'text-green-600' : 'text-orange-600'}`}>{hasPaidCurrentMonth ? 'You have paid for this month. Thank you!' : `Amount Due: ₹${settings.maintenanceAmount}`}</p>
           </div>
-          {!hasPaidCurrentMonth && profile.role !== 'Tenant' && (<button onClick={() => setIsPaymentModalOpen(true)} className="mt-4 md:mt-0 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium shadow-sm transition-colors flex items-center"><CreditCard size={18} className="mr-2" />Pay Maintenance</button>)}
-           {!hasPaidCurrentMonth && profile.role === 'Tenant' && (<p className="mt-4 md:mt-0 text-sm font-medium text-orange-600 bg-orange-100 px-4 py-2 rounded-lg">Pending Owner Payment</p>)}
+          {!hasPaidCurrentMonth && profile.role !== 'Tenant' && (<button onClick={() => setIsPaymentModalOpen(true)} className="mt-4 md:mt-0 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium shadow-sm transition-colors flex items-center"><CreditCard size={18} className="mr-2" />Pay to WHITE PALACE ASSOCIATION</button>)}
+          {!hasPaidCurrentMonth && profile.role === 'Tenant' && (<p className="mt-4 md:mt-0 text-sm font-medium text-orange-600 bg-orange-100 px-4 py-2 rounded-lg">Pending Owner Payment</p>)}
         </div>
       </div>
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
@@ -321,7 +321,7 @@ const Dashboard = ({ profile, settings, payments, ledgerStats, showToast, getCol
           <table className="w-full text-left text-sm">
             <thead className="bg-slate-50 text-slate-500 border-b border-slate-200"><tr><th className="p-4 font-medium">Month</th><th className="p-4 font-medium">Date</th><th className="p-4 font-medium">Amount</th><th className="p-4 font-medium">Txn ID</th><th className="p-4 font-medium">Status</th></tr></thead>
             <tbody className="divide-y divide-slate-100">
-              {myPayments.length === 0 ? (<tr><td colSpan="5" className="p-6 text-center text-slate-500">No payment history found.</td></tr>) : (myPayments.map(p => (<tr key={p.id} className="hover:bg-slate-50 transition-colors"><td className="p-4 font-medium text-slate-800">{p.paymentMonth}</td><td className="p-4 text-slate-600">{new Date(p.timestamp).toLocaleDateString()}</td><td className="p-4 text-slate-800">₹{p.amount}</td><td className="p-4 text-slate-500 font-mono text-xs">{p.transactionID}</td><td className="p-4"><span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">{p.status}</span></td></tr>))) }
+              {myPayments.length === 0 ? (<tr><td colSpan="5" className="p-6 text-center text-slate-500">No payment history found.</td></tr>) : (myPayments.map(p => (<tr key={p.id} className="hover:bg-slate-50 transition-colors"><td className="p-4 font-medium text-slate-800">{p.paymentMonth}</td><td className="p-4 text-slate-600">{new Date(p.timestamp).toLocaleDateString()}</td><td className="p-4 text-slate-800">₹{p.amount}</td><td className="p-4 text-slate-500 font-mono text-xs">{p.transactionID}</td><td className="p-4"><span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">{p.status}</span></td></tr>)))}
             </tbody>
           </table>
         </div>
@@ -336,7 +336,7 @@ const Dashboard = ({ profile, settings, payments, ledgerStats, showToast, getCol
           </div>
           <div className="pt-2 space-y-4">
             {!isBankConfigured && (<p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">Admin has not set the apartment Bank Details yet.</p>)}
-            <a href={upiString} className={`w-full py-3 rounded-lg font-bold text-white transition-all flex items-center justify-center shadow-md ${!isBankConfigured ? 'bg-slate-400 pointer-events-none' : 'bg-green-600 hover:bg-green-700'}`}>Open Google Pay / UPI App</a>
+            <a href={upiString} className={`w-full py-3 rounded-lg font-bold text-white transition-all flex items-center justify-center shadow-md ${!isBankConfigured ? 'bg-slate-400 pointer-events-none' : 'bg-green-600 hover:bg-green-700'}`}>Pay to WHITE PALACE ASSOCIATION</a>
             <div className="border-t border-slate-200 pt-4 mt-2">
               <label className="block text-sm font-medium text-slate-700 mb-1">Step 2: Enter Transaction ID (UTR)</label>
               <p className="text-xs text-slate-500 mb-2">After paying in your UPI app, enter the 12-digit UTR number here.</p>
@@ -380,17 +380,17 @@ const LedgerView = ({ profile, ledgerStats, showToast, getCollectionRef }) => {
               <tr><th className="p-3 border-r border-slate-200">Date</th><th className="p-3 border-r border-slate-200">Description</th><th className="p-3 border-r border-slate-200">Ref / Flat</th><th className="p-3 border-r border-slate-200 text-right">Income (₹)</th><th className="p-3 border-r border-slate-200 text-right">Expense (₹)</th><th className="p-3 text-right bg-blue-50">Balance (₹)</th></tr>
             </thead>
             <tbody className="divide-y divide-slate-200">
-              {ledgerStats.processedLedger.length === 0 ? (<tr><td colSpan="6" className="p-6 text-center text-slate-500">No ledger entries yet.</td></tr>) : (ledgerStats.processedLedger.map((entry) => (<tr key={entry.id} className="hover:bg-slate-50"><td className="p-3 border-r border-slate-200 whitespace-nowrap text-slate-600">{entry.date}</td><td className="p-3 border-r border-slate-200 text-slate-800">{entry.description}</td><td className="p-3 border-r border-slate-200 text-slate-600">{entry.flatNumber || '-'}</td><td className="p-3 border-r border-slate-200 text-right font-medium text-green-600 bg-green-50/30">{entry.type === 'Income' ? entry.amount : ''}</td><td className="p-3 border-r border-slate-200 text-right font-medium text-red-600 bg-red-50/30">{entry.type === 'Expense' ? entry.amount : ''}</td><td className="p-3 text-right font-bold text-slate-800 bg-blue-50/50">{entry.runningBalance}</td></tr>))) }
+              {ledgerStats.processedLedger.length === 0 ? (<tr><td colSpan="6" className="p-6 text-center text-slate-500">No ledger entries yet.</td></tr>) : (ledgerStats.processedLedger.map((entry) => (<tr key={entry.id} className="hover:bg-slate-50"><td className="p-3 border-r border-slate-200 whitespace-nowrap text-slate-600">{entry.date}</td><td className="p-3 border-r border-slate-200 text-slate-800">{entry.description}</td><td className="p-3 border-r border-slate-200 text-slate-600">{entry.flatNumber || '-'}</td><td className="p-3 border-r border-slate-200 text-right font-medium text-green-600 bg-green-50/30">{entry.type === 'Income' ? entry.amount : ''}</td><td className="p-3 border-r border-slate-200 text-right font-medium text-red-600 bg-red-50/30">{entry.type === 'Expense' ? entry.amount : ''}</td><td className="p-3 text-right font-bold text-slate-800 bg-blue-50/50">{entry.runningBalance}</td></tr>)))}
             </tbody>
           </table>
         </div>
       </div>
       <Modal isOpen={isAddModalOpen} title="Add Ledger Entry" onClose={() => setIsAddModalOpen(false)}>
         <form onSubmit={handleAddEntry} className="space-y-4">
-          <div><label className="block text-sm font-medium text-slate-700 mb-1">Date</label><input required type="date" className="w-full p-2 border rounded-md" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} /></div>
-          <div><label className="block text-sm font-medium text-slate-700 mb-1">Type</label><select className="w-full p-2 border rounded-md" value={formData.type} onChange={e => setFormData({...formData, type: e.target.value})}><option value="Income">Income</option><option value="Expense">Expense</option></select></div>
-          <div><label className="block text-sm font-medium text-slate-700 mb-1">Description</label><input required type="text" className="w-full p-2 border rounded-md" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} /></div>
-          <div><label className="block text-sm font-medium text-slate-700 mb-1">Amount (₹)</label><input required type="number" min="1" className="w-full p-2 border rounded-md" value={formData.amount} onChange={e => setFormData({...formData, amount: e.target.value})} /></div>
+          <div><label className="block text-sm font-medium text-slate-700 mb-1">Date</label><input required type="date" className="w-full p-2 border rounded-md" value={formData.date} onChange={e => setFormData({ ...formData, date: e.target.value })} /></div>
+          <div><label className="block text-sm font-medium text-slate-700 mb-1">Type</label><select className="w-full p-2 border rounded-md" value={formData.type} onChange={e => setFormData({ ...formData, type: e.target.value })}><option value="Income">Income</option><option value="Expense">Expense</option></select></div>
+          <div><label className="block text-sm font-medium text-slate-700 mb-1">Description</label><input required type="text" className="w-full p-2 border rounded-md" value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} /></div>
+          <div><label className="block text-sm font-medium text-slate-700 mb-1">Amount (₹)</label><input required type="number" min="1" className="w-full p-2 border rounded-md" value={formData.amount} onChange={e => setFormData({ ...formData, amount: e.target.value })} /></div>
           <button type="submit" className="w-full bg-slate-800 text-white p-2 rounded-md font-medium mt-4 hover:bg-slate-900">Save Entry</button>
         </form>
       </Modal>
@@ -413,12 +413,12 @@ const AnnouncementsView = ({ profile, announcements, showToast, getCollectionRef
     <div className="space-y-6 max-w-4xl mx-auto">
       <div className="flex justify-between items-center"><h2 className="text-2xl font-bold text-slate-800">Notice Board</h2>{profile.role === 'Admin' && (<button onClick={() => setIsAddModalOpen(true)} className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center shadow-sm hover:bg-blue-700"><Plus size={16} className="mr-1" /> New Notice</button>)}</div>
       <div className="space-y-4">
-        {sortedAnnouncements.length === 0 ? (<div className="p-8 text-center bg-white rounded-xl border border-slate-200 text-slate-500">No announcements yet.</div>) : (sortedAnnouncements.map(notice => (<div key={notice.id} className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden"><div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500"></div><h3 className="text-lg font-bold text-slate-800">{notice.title}</h3><p className="text-xs text-slate-500 mb-3">{notice.date} • By {notice.createdByAdmin}</p><p className="text-slate-700 whitespace-pre-wrap">{notice.message}</p></div>))) }
+        {sortedAnnouncements.length === 0 ? (<div className="p-8 text-center bg-white rounded-xl border border-slate-200 text-slate-500">No announcements yet.</div>) : (sortedAnnouncements.map(notice => (<div key={notice.id} className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden"><div className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500"></div><h3 className="text-lg font-bold text-slate-800">{notice.title}</h3><p className="text-xs text-slate-500 mb-3">{notice.date} • By {notice.createdByAdmin}</p><p className="text-slate-700 whitespace-pre-wrap">{notice.message}</p></div>)))}
       </div>
       <Modal isOpen={isAddModalOpen} title="Post Announcement" onClose={() => setIsAddModalOpen(false)}>
         <form onSubmit={handleAdd} className="space-y-4">
-          <div><label className="block text-sm font-medium text-slate-700 mb-1">Notice Title</label><input required type="text" className="w-full p-2 border rounded-md" value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} /></div>
-          <div><label className="block text-sm font-medium text-slate-700 mb-1">Message</label><textarea required rows={5} className="w-full p-2 border rounded-md resize-none" value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})}></textarea></div>
+          <div><label className="block text-sm font-medium text-slate-700 mb-1">Notice Title</label><input required type="text" className="w-full p-2 border rounded-md" value={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })} /></div>
+          <div><label className="block text-sm font-medium text-slate-700 mb-1">Message</label><textarea required rows={5} className="w-full p-2 border rounded-md resize-none" value={formData.message} onChange={e => setFormData({ ...formData, message: e.target.value })}></textarea></div>
           <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded-md font-medium mt-4 hover:bg-blue-700">Publish to All</button>
         </form>
       </Modal>
@@ -442,7 +442,7 @@ const MessagesView = ({ profile, messages, showToast, getCollectionRef }) => {
     <div className="space-y-6 max-w-4xl mx-auto h-[80vh] flex flex-col">
       <h2 className="text-2xl font-bold text-slate-800 shrink-0">Help & Support</h2>
       <div className="flex-1 overflow-y-auto bg-slate-50 rounded-xl border border-slate-200 p-4 space-y-4">
-        {sortedMessages.length === 0 ? (<div className="text-center text-slate-500 mt-10">No messages found.</div>) : (sortedMessages.map(msg => (<div key={msg.id} className="bg-white p-4 rounded-lg shadow-sm border border-slate-200"><div className="flex justify-between items-start mb-2"><div><span className="font-bold text-slate-800">{msg.senderName}</span><span className="text-xs text-slate-500 ml-2">Flat {msg.flatNumber}</span></div><span className={`text-xs px-2 py-1 rounded-full ${msg.status === 'Open' ? 'bg-orange-100 text-orange-800' : 'bg-green-100 text-green-800'}`}>{msg.status}</span></div><p className="text-slate-700">{msg.message}</p><p className="text-xs text-slate-400 mt-2">{msg.date}</p></div>))) }
+        {sortedMessages.length === 0 ? (<div className="text-center text-slate-500 mt-10">No messages found.</div>) : (sortedMessages.map(msg => (<div key={msg.id} className="bg-white p-4 rounded-lg shadow-sm border border-slate-200"><div className="flex justify-between items-start mb-2"><div><span className="font-bold text-slate-800">{msg.senderName}</span><span className="text-xs text-slate-500 ml-2">Flat {msg.flatNumber}</span></div><span className={`text-xs px-2 py-1 rounded-full ${msg.status === 'Open' ? 'bg-orange-100 text-orange-800' : 'bg-green-100 text-green-800'}`}>{msg.status}</span></div><p className="text-slate-700">{msg.message}</p><p className="text-xs text-slate-400 mt-2">{msg.date}</p></div>)))}
       </div>
       {profile.role !== 'Admin' && (<form onSubmit={handleSend} className="shrink-0 flex gap-2"><input type="text" placeholder="Type your message..." className="flex-1 p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" value={formData} onChange={e => setFormData(e.target.value)} /><button type="submit" className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">Send</button></form>)}
     </div>
@@ -454,7 +454,7 @@ const ContactsView = ({ profile, contacts, showToast, getCollectionRef }) => {
   const [formData, setFormData] = useState({ name: '', designation: '', phoneNumber: '' });
   const handleAdd = async (e) => {
     e.preventDefault();
-    try { await addDoc(getCollectionRef('contacts'), formData); showToast("Contact added."); setIsAddModalOpen(false); setFormData({ name: '', designation: '', phoneNumber: '' }); } 
+    try { await addDoc(getCollectionRef('contacts'), formData); showToast("Contact added."); setIsAddModalOpen(false); setFormData({ name: '', designation: '', phoneNumber: '' }); }
     catch (err) { showToast("Error adding contact.", "error"); }
   };
   return (
@@ -466,9 +466,9 @@ const ContactsView = ({ profile, contacts, showToast, getCollectionRef }) => {
       </div>
       <Modal isOpen={isAddModalOpen} title="Add Contact" onClose={() => setIsAddModalOpen(false)}>
         <form onSubmit={handleAdd} className="space-y-4">
-          <div><label className="block text-sm font-medium text-slate-700 mb-1">Designation</label><input required type="text" className="w-full p-2 border rounded-md" value={formData.designation} onChange={e => setFormData({...formData, designation: e.target.value})} /></div>
-          <div><label className="block text-sm font-medium text-slate-700 mb-1">Name</label><input required type="text" className="w-full p-2 border rounded-md" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} /></div>
-          <div><label className="block text-sm font-medium text-slate-700 mb-1">Phone Number</label><input required type="tel" className="w-full p-2 border rounded-md" value={formData.phoneNumber} onChange={e => setFormData({...formData, phoneNumber: e.target.value})} /></div>
+          <div><label className="block text-sm font-medium text-slate-700 mb-1">Designation</label><input required type="text" className="w-full p-2 border rounded-md" value={formData.designation} onChange={e => setFormData({ ...formData, designation: e.target.value })} /></div>
+          <div><label className="block text-sm font-medium text-slate-700 mb-1">Name</label><input required type="text" className="w-full p-2 border rounded-md" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} /></div>
+          <div><label className="block text-sm font-medium text-slate-700 mb-1">Phone Number</label><input required type="tel" className="w-full p-2 border rounded-md" value={formData.phoneNumber} onChange={e => setFormData({ ...formData, phoneNumber: e.target.value })} /></div>
           <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded-md font-medium mt-4 hover:bg-blue-700">Save Contact</button>
         </form>
       </Modal>
@@ -489,13 +489,13 @@ const SettingsView = ({ settings, showToast, getCollectionRef }) => {
     <div className="max-w-2xl mx-auto bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
       <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center"><Settings className="mr-2" /> Global Settings</h2>
       <form onSubmit={handleSave} className="space-y-6">
-        <div><label className="block text-sm font-bold text-slate-700 mb-2">Monthly Maintenance Amount (₹)</label><input required type="number" min="0" className="w-full p-3 border border-slate-300 rounded-lg text-lg" value={formData.maintenanceAmount} onChange={e => setFormData({...formData, maintenanceAmount: e.target.value})} /></div>
+        <div><label className="block text-sm font-bold text-slate-700 mb-2">Monthly Maintenance Amount (₹)</label><input required type="number" min="0" className="w-full p-3 border border-slate-300 rounded-lg text-lg" value={formData.maintenanceAmount} onChange={e => setFormData({ ...formData, maintenanceAmount: e.target.value })} /></div>
         <div className="pt-4 border-t border-slate-200">
           <h3 className="text-lg font-bold text-slate-800 mb-4">Bank Account Details (For GPay Auto-Pay)</h3>
           <div className="space-y-4">
-            <div><label className="block text-sm font-bold text-slate-700 mb-1">Account Holder Name</label><input required type="text" className="w-full p-3 border border-slate-300 rounded-lg" value={formData.accountName} onChange={e => setFormData({...formData, accountName: e.target.value})} /></div>
-            <div><label className="block text-sm font-bold text-slate-700 mb-1">Bank Account Number</label><input required type="text" className="w-full p-3 border border-slate-300 rounded-lg font-mono" value={formData.accountNumber} onChange={e => setFormData({...formData, accountNumber: e.target.value})} /></div>
-            <div><label className="block text-sm font-bold text-slate-700 mb-1">IFSC Code</label><input required type="text" className="w-full p-3 border border-slate-300 rounded-lg font-mono uppercase" value={formData.ifscCode} onChange={e => setFormData({...formData, ifscCode: e.target.value.toUpperCase()})} /></div>
+            <div><label className="block text-sm font-bold text-slate-700 mb-1">Account Holder Name</label><input required type="text" className="w-full p-3 border border-slate-300 rounded-lg" value={formData.accountName} onChange={e => setFormData({ ...formData, accountName: e.target.value })} /></div>
+            <div><label className="block text-sm font-bold text-slate-700 mb-1">Bank Account Number</label><input required type="text" className="w-full p-3 border border-slate-300 rounded-lg font-mono" value={formData.accountNumber} onChange={e => setFormData({ ...formData, accountNumber: e.target.value })} /></div>
+            <div><label className="block text-sm font-bold text-slate-700 mb-1">IFSC Code</label><input required type="text" className="w-full p-3 border border-slate-300 rounded-lg font-mono uppercase" value={formData.ifscCode} onChange={e => setFormData({ ...formData, ifscCode: e.target.value.toUpperCase() })} /></div>
           </div>
         </div>
         <button type="submit" className="bg-slate-800 text-white px-6 py-3 rounded-lg font-medium hover:bg-slate-900 transition-colors">Update Settings</button>
@@ -531,10 +531,10 @@ const DirectoryView = ({ profiles, payments, showToast, getCollectionRef }) => {
       </div>
       <Modal isOpen={isAddModalOpen} title="Add New Resident" onClose={() => setIsAddModalOpen(false)}>
         <form onSubmit={handleAddResident} className="space-y-4">
-          <div><label className="block text-sm font-medium text-slate-700 mb-1">Flat Number</label><input required type="text" className="w-full p-3 border border-slate-300 rounded-lg uppercase" value={formData.flatNumber} onChange={e => setFormData({...formData, flatNumber: e.target.value.toUpperCase()})} /></div>
-          <div><label className="block text-sm font-medium text-slate-700 mb-1">Name</label><input required type="text" className="w-full p-3 border border-slate-300 rounded-lg" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} /></div>
-          <div><label className="block text-sm font-medium text-slate-700 mb-1">Phone</label><input required type="tel" className="w-full p-3 border border-slate-300 rounded-lg" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} /></div>
-          <div><label className="block text-sm font-medium text-slate-700 mb-1">Role</label><select className="w-full p-3 border border-slate-300 rounded-lg" value={formData.role} onChange={e => setFormData({...formData, role: e.target.value})}><option value="Owner">Resident (Owner)</option><option value="Tenant">Tenant</option></select></div>
+          <div><label className="block text-sm font-medium text-slate-700 mb-1">Flat Number</label><input required type="text" className="w-full p-3 border border-slate-300 rounded-lg uppercase" value={formData.flatNumber} onChange={e => setFormData({ ...formData, flatNumber: e.target.value.toUpperCase() })} /></div>
+          <div><label className="block text-sm font-medium text-slate-700 mb-1">Name</label><input required type="text" className="w-full p-3 border border-slate-300 rounded-lg" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} /></div>
+          <div><label className="block text-sm font-medium text-slate-700 mb-1">Phone</label><input required type="tel" className="w-full p-3 border border-slate-300 rounded-lg" value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} /></div>
+          <div><label className="block text-sm font-medium text-slate-700 mb-1">Role</label><select className="w-full p-3 border border-slate-300 rounded-lg" value={formData.role} onChange={e => setFormData({ ...formData, role: e.target.value })}><option value="Owner">Resident (Owner)</option><option value="Tenant">Tenant</option></select></div>
           <button type="submit" className="w-full bg-blue-600 text-white p-3 rounded-lg font-medium mt-4 hover:bg-blue-700">Save</button>
         </form>
       </Modal>
