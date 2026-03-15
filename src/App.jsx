@@ -286,8 +286,12 @@ const Dashboard = ({ profile, settings, payments, ledgerStats, showToast, getCol
   const [isProcessing, setIsProcessing] = useState(false);
   const [utrNumber, setUtrNumber] = useState('');
 
-  const isBankConfigured = settings.accountNumber && settings.ifscCode;
-  const upiString = isBankConfigured ? `upi://pay?pa=${settings.accountNumber}@${settings.ifscCode}.ifsc.npci&pn=${encodeURIComponent(settings.accountName || 'WHITE PALACE ASSOCIATION')}&am=${settings.maintenanceAmount}&cu=INR&tn=Flat_${profile.flatNumber}_Maintenance` : '#';
+  const isBankConfigured = settings.upiId || (settings.accountNumber && settings.ifscCode);
+  const upiString = settings.upiId
+    ? `upi://pay?pa=${settings.upiId}&pn=${encodeURIComponent(settings.accountName || 'WHITE PALACE ASSOCIATION')}&am=${settings.maintenanceAmount}&cu=INR&tn=Maintenance`
+    : (settings.accountNumber && settings.ifscCode)
+      ? `upi://pay?pa=${settings.accountNumber}@${settings.ifscCode}.ifsc.npci&pn=${encodeURIComponent(settings.accountName || 'WHITE PALACE ASSOCIATION')}&am=${settings.maintenanceAmount}&cu=INR&tn=Flat_${profile.flatNumber}_Maintenance`
+      : '#';
 
   const handlePayment = async () => {
     if (!utrNumber || utrNumber.length < 6) { showToast("Please enter a valid Transaction ID/UTR.", "error"); return; }
@@ -477,11 +481,11 @@ const ContactsView = ({ profile, contacts, showToast, getCollectionRef }) => {
 };
 
 const SettingsView = ({ settings, showToast, getCollectionRef }) => {
-  const [formData, setFormData] = useState({ maintenanceAmount: settings.maintenanceAmount || 1200, accountName: settings.accountName || '', accountNumber: settings.accountNumber || '', ifscCode: settings.ifscCode || '' });
+  const [formData, setFormData] = useState({ maintenanceAmount: settings.maintenanceAmount || 1200, accountName: settings.accountName || '', accountNumber: settings.accountNumber || '', ifscCode: settings.ifscCode || '', upiId: settings.upiId || '' });
   const handleSave = async (e) => {
     e.preventDefault();
     try {
-      await setDoc(doc(getCollectionRef('settings'), 'global'), { maintenanceAmount: Number(formData.maintenanceAmount), accountName: formData.accountName, accountNumber: formData.accountNumber, ifscCode: formData.ifscCode.toUpperCase(), currency: 'INR', lastUpdated: Date.now() }, { merge: true });
+      await setDoc(doc(getCollectionRef('settings'), 'global'), { maintenanceAmount: Number(formData.maintenanceAmount), accountName: formData.accountName, accountNumber: formData.accountNumber, ifscCode: formData.ifscCode.toUpperCase(), upiId: formData.upiId, currency: 'INR', lastUpdated: Date.now() }, { merge: true });
       showToast("Settings updated successfully.");
     } catch (err) { showToast("Error saving settings.", "error"); }
   };
@@ -494,8 +498,9 @@ const SettingsView = ({ settings, showToast, getCollectionRef }) => {
           <h3 className="text-lg font-bold text-slate-800 mb-4">Bank Account Details (For GPay Auto-Pay)</h3>
           <div className="space-y-4">
             <div><label className="block text-sm font-bold text-slate-700 mb-1">Account Holder Name</label><input required type="text" className="w-full p-3 border border-slate-300 rounded-lg" value={formData.accountName} onChange={e => setFormData({ ...formData, accountName: e.target.value })} /></div>
-            <div><label className="block text-sm font-bold text-slate-700 mb-1">Bank Account Number</label><input required type="text" className="w-full p-3 border border-slate-300 rounded-lg font-mono" value={formData.accountNumber} onChange={e => setFormData({ ...formData, accountNumber: e.target.value })} /></div>
-            <div><label className="block text-sm font-bold text-slate-700 mb-1">IFSC Code</label><input required type="text" className="w-full p-3 border border-slate-300 rounded-lg font-mono uppercase" value={formData.ifscCode} onChange={e => setFormData({ ...formData, ifscCode: e.target.value.toUpperCase() })} /></div>
+            <div><label className="block text-sm font-bold text-slate-700 mb-1">UPI ID (Optional)</label><input type="text" className="w-full p-3 border border-slate-300 rounded-lg" value={formData.upiId} onChange={e => setFormData({ ...formData, upiId: e.target.value })} placeholder="e.g. email@bank" /></div>
+            <div><label className="block text-sm font-bold text-slate-700 mb-1">Bank Account Number</label><input type="text" className="w-full p-3 border border-slate-300 rounded-lg font-mono" value={formData.accountNumber} onChange={e => setFormData({ ...formData, accountNumber: e.target.value })} /></div>
+            <div><label className="block text-sm font-bold text-slate-700 mb-1">IFSC Code</label><input type="text" className="w-full p-3 border border-slate-300 rounded-lg font-mono uppercase" value={formData.ifscCode} onChange={e => setFormData({ ...formData, ifscCode: e.target.value.toUpperCase() })} /></div>
           </div>
         </div>
         <button type="submit" className="bg-slate-800 text-white px-6 py-3 rounded-lg font-medium hover:bg-slate-900 transition-colors">Update Settings</button>
