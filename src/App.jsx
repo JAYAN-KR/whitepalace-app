@@ -168,7 +168,7 @@ export default function App() {
       <div className="md:w-64 bg-slate-900 text-slate-200 flex flex-col md:min-h-screen shadow-xl z-20">
         <div className="p-4 bg-slate-950 flex justify-between items-center">
           <div>
-            <h1 className="text-xl font-bold text-white tracking-wide">Skyline Mews</h1>
+            <h1 className="text-xl font-bold text-white tracking-wide">White Palace Apartment</h1>
             <p className="text-xs text-slate-400 capitalize">{profile.role} Portal</p>
           </div>
           <button className="md:hidden text-slate-300" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}><Menu size={24} /></button>
@@ -234,7 +234,7 @@ const ProfileSetup = ({ user, onComplete, db, appId }) => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-100 p-4">
       <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
-        <h2 className="text-2xl font-bold text-slate-800 mb-2">Welcome to Skyline Mews</h2>
+        <h2 className="text-2xl font-bold text-slate-800 mb-2">Welcome to White Palace Apartment</h2>
         <p className="text-slate-500 mb-6">Let's set up your profile for the community portal.</p>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div><label className="block text-sm font-medium text-slate-700 mb-1">Full Name</label><input required type="text" className="w-full p-3 border border-slate-300 rounded-lg" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} /></div>
@@ -287,7 +287,7 @@ const Dashboard = ({ profile, settings, payments, ledgerStats, showToast, getCol
   const [utrNumber, setUtrNumber] = useState('');
 
   const isBankConfigured = settings.accountNumber && settings.ifscCode;
-  const upiString = isBankConfigured ? `upi://pay?pa=${settings.accountNumber}@${settings.ifscCode}.ifsc.npci&pn=${encodeURIComponent(settings.accountName || 'Apartment Association')}&am=${settings.maintenanceAmount}&cu=INR&tn=Flat_${profile.flatNumber}_Maintenance` : '#';
+  const upiString = isBankConfigured ? `const upiString = `upi://pay?pa=jkrmalalayam@okicici&pn=White%20Palace%20Apartment&am=10&cu=INR&tn=Flat_${profile.flatNumber}_Maintenance`;//pay?pa=${settings.accountNumber}@${settings.ifscCode}.ifsc.npci&pn=${encodeURIComponent(settings.accountName || 'Apartment Association')}&am=${settings.maintenanceAmount}&cu=INR&tn=Flat_${profile.flatNumber}_Maintenance` : '#';
 
   const handlePayment = async () => {
     if (!utrNumber || utrNumber.length < 6) { showToast("Please enter a valid Transaction ID/UTR.", "error"); return; }
