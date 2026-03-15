@@ -287,7 +287,7 @@ const Dashboard = ({ profile, settings, payments, ledgerStats, showToast, getCol
   const [utrNumber, setUtrNumber] = useState('');
 
   const isBankConfigured = settings.accountNumber && settings.ifscCode;
-  const upiString = isBankConfigured ? `const upiString = `upi://pay?pa=jkrmalalayam@okicici&pn=White%20Palace%20Apartment&am=10&cu=INR&tn=Flat_${profile.flatNumber}_Maintenance`;//pay?pa=${settings.accountNumber}@${settings.ifscCode}.ifsc.npci&pn=${encodeURIComponent(settings.accountName || 'Apartment Association')}&am=${settings.maintenanceAmount}&cu=INR&tn=Flat_${profile.flatNumber}_Maintenance` : '#';
+  const upiString = isBankConfigured ? `const upiString = `upi://pay?pa=jkrmalayalam@okicici&pn=White%20Palace%20Apartment&am=10&cu=INR&tn=Flat_${profile.flatNumber}_Maintenance`;//pay?pa=${settings.accountNumber}@${settings.ifscCode}.ifsc.npci&pn=${encodeURIComponent(settings.accountName || 'Apartment Association')}&am=${settings.maintenanceAmount}&cu=INR&tn=Flat_${profile.flatNumber}_Maintenance` : '#';
 
   const handlePayment = async () => {
     if (!utrNumber || utrNumber.length < 6) { showToast("Please enter a valid Transaction ID/UTR.", "error"); return; }
