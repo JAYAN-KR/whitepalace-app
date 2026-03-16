@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Home, FileText, Bell, MessageSquare, Phone, Users, Settings, Plus, DollarSign, CreditCard, CheckCircle, X, AlertCircle, Menu, LogOut
 } from 'lucide-react';
@@ -288,7 +288,7 @@ const Dashboard = ({ profile, settings, payments, ledgerStats, showToast, getCol
 
   const isBankConfigured = settings.upiId || (settings.accountNumber && settings.ifscCode);
   const upiString = settings.upiId
-    ? `upi://pay?pa=${settings.upiId}&pn=${encodeURIComponent(settings.accountName || 'WHITE PALACE ASSOCIATION')}&am=${settings.maintenanceAmount}&cu=INR&tn=Maintenance`
+    ? `upi://pay?pa=${settings.upiId}&pn=${encodeURIComponent(settings.accountName || 'WHITE PALACE ASSOCIATION')}&am=${settings.maintenanceAmount}&cu=INR&tn=Flat_${profile.flatNumber}_Maintenance`
     : (settings.accountNumber && settings.ifscCode)
       ? `upi://pay?pa=${settings.accountNumber}@${settings.ifscCode}.ifsc.npci&pn=${encodeURIComponent(settings.accountName || 'WHITE PALACE ASSOCIATION')}&am=${settings.maintenanceAmount}&cu=INR&tn=Flat_${profile.flatNumber}_Maintenance`
       : '#';
