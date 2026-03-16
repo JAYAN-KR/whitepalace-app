@@ -286,11 +286,16 @@ const Dashboard = ({ profile, settings, payments, ledgerStats, showToast, getCol
   const [isProcessing, setIsProcessing] = useState(false);
   const [utrNumber, setUtrNumber] = useState('');
 
-  const isBankConfigured = settings.upiId || (settings.accountNumber && settings.ifscCode);
-  const upiString = settings.upiId
-    ? `upi://pay?pa=${settings.upiId}&pn=${encodeURIComponent(settings.accountName || 'WHITE PALACE ASSOCIATION')}&am=${settings.maintenanceAmount}&cu=INR&tn=Flat_${profile.flatNumber}_Maintenance`
-    : (settings.accountNumber && settings.ifscCode)
-      ? `upi://pay?pa=${settings.accountNumber}@${settings.ifscCode}.ifsc.npci&pn=${encodeURIComponent(settings.accountName || 'WHITE PALACE ASSOCIATION')}&am=${settings.maintenanceAmount}&cu=INR&tn=Flat_${profile.flatNumber}_Maintenance`
+  const targetUpiId = settings.upiId || 'sindhujayanc3@oksbi';
+  const targetAccountName = settings.accountName || 'WHITE PALACE ASSOCIATION';
+  const targetAccountNumber = settings.accountNumber || '7922646832';
+  const targetIfscCode = settings.ifscCode || 'IDIB000T171';
+
+  const isBankConfigured = targetUpiId || (targetAccountNumber && targetIfscCode);
+  const upiString = targetUpiId
+    ? `upi://pay?pa=${targetUpiId}&pn=${encodeURIComponent(targetAccountName)}&am=${settings.maintenanceAmount}&cu=INR&tn=Flat_${profile.flatNumber}_Maintenance`
+    : (targetAccountNumber && targetIfscCode)
+      ? `upi://pay?pa=${targetAccountNumber}@${targetIfscCode}.ifsc.npci&pn=${encodeURIComponent(targetAccountName)}&am=${settings.maintenanceAmount}&cu=INR&tn=Flat_${profile.flatNumber}_Maintenance`
       : '#';
 
   const handlePayment = async () => {
@@ -481,7 +486,7 @@ const ContactsView = ({ profile, contacts, showToast, getCollectionRef }) => {
 };
 
 const SettingsView = ({ settings, showToast, getCollectionRef }) => {
-  const [formData, setFormData] = useState({ maintenanceAmount: settings.maintenanceAmount || 1200, accountName: settings.accountName || '', accountNumber: settings.accountNumber || '', ifscCode: settings.ifscCode || '', upiId: settings.upiId || '' });
+  const [formData, setFormData] = useState({ maintenanceAmount: settings.maintenanceAmount || 1200, accountName: settings.accountName || 'WHITE PALACE ASSOCIATION', accountNumber: settings.accountNumber || '7922646832', ifscCode: settings.ifscCode || 'IDIB000T171', upiId: settings.upiId || 'sindhujayanc3@oksbi' });
   const handleSave = async (e) => {
     e.preventDefault();
     try {
