@@ -292,10 +292,11 @@ const Dashboard = ({ profile, settings, payments, ledgerStats, showToast, getCol
   const targetIfscCode = settings.ifscCode || 'IDIB000T171';
 
   const isBankConfigured = targetUpiId || (targetAccountNumber && targetIfscCode);
+  const uniqueTrId = `WPM${Date.now()}`;
   const upiString = targetUpiId
-    ? `upi://pay?pa=${targetUpiId}&pn=${encodeURIComponent(targetAccountName)}&am=${settings.maintenanceAmount}&cu=INR&tn=Flat_${profile.flatNumber}_Maintenance`
+    ? `upi://pay?pa=${targetUpiId}&pn=${encodeURIComponent(targetAccountName)}&tr=${uniqueTrId}&am=${settings.maintenanceAmount}&cu=INR&tn=Flat_${profile.flatNumber}_Maintenance`
     : (targetAccountNumber && targetIfscCode)
-      ? `upi://pay?pa=${targetAccountNumber}@${targetIfscCode}.ifsc.npci&pn=${encodeURIComponent(targetAccountName)}&am=${settings.maintenanceAmount}&cu=INR&tn=Flat_${profile.flatNumber}_Maintenance`
+      ? `upi://pay?pa=${targetAccountNumber}@${targetIfscCode}.ifsc.npci&pn=${encodeURIComponent(targetAccountName)}&tr=${uniqueTrId}&am=${settings.maintenanceAmount}&cu=INR&tn=Flat_${profile.flatNumber}_Maintenance`
       : '#';
 
   const handlePayment = async () => {
